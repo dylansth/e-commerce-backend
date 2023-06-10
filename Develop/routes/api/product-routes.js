@@ -1,16 +1,58 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
+const errorHandler = (res, err) => {
+  console.log(err);
+  res.status(500).json(err);
+};
+
 // The `/api/products` endpoint
 
 // get all products
 router.get('/', (req, res) => {
+  Product.findAll({
+    include: [
+      {
+        model: Category,
+        attributes: ['id', 'category_name'],
+      },
+      {
+        model: Tag,
+        attributes: ['id', 'tag_name']
+      }
+    ],
+  })
   // find all products
   // be sure to include its associated Category and Tag data
+  .then((products) => res.json(products))
+  .catch((err) => errorHandler(res, err));
 });
 
 // get one product
 router.get('/:id', (req, res) => {
+  Product.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: [
+    {
+      model: Category,
+      attributes: ['id', 'category_name'],
+    },
+    {
+      mode: Tag,
+      attributes: ['id', 'category_name'],
+    },
+  ],
+  })
+  .then((product) => {
+    if (!product) {
+      res.status(404).json({ message: 'No product found with this id' });
+      return;
+    }
+    res.json(product);
+  })
+  .catch((err) => errorHandler(res, err));
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
 });

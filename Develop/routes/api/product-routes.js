@@ -59,6 +59,11 @@ router.get('/:id', (req, res) => {
 
 // create new product
 router.post('/', (req, res) => {
+  const newUserProduct = req.body
+  Product.create(newUserProduct)
+  .then((createdProduct) => {
+    
+  })
   /* req.body should look like this...
     {
       product_name: "Basketball",

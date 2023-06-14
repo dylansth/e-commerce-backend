@@ -10,9 +10,9 @@ Product.belongsTo(Category, {
 
 Category.hasMany(Product);
 
-Product.belongsToMany(Tag, { through: ProductTag});
+Product.belongsToMany(Tag, { through: ProductTag });
 
-Tag.belongsToMany(Product, { through: ProductTag});
+Tag.belongsToMany(Product, { through: ProductTag });
 
 module.exports = {
   Product,
